@@ -5,7 +5,8 @@ class DashboardController < ApplicationController
     @use_drop_down_menu = Setting.plugin_dashboard['use_drop_down_menu']
     @selected_project_id = params[:project_id].nil? ? -1 : params[:project_id].to_i
     show_sub_tasks = Setting.plugin_dashboard['display_child_projects_tasks']
-    @show_project_badge = @selected_project_id == -1 || @selected_project_id != -1 && show_sub_tasks
+    @show_project_badge = false
+    # @show_project_badge = @selected_project_id == -1 || @selected_project_id != -1 && show_sub_tasks
     @use_drag_and_drop = Setting.plugin_dashboard['enable_drag_and_drop']
     @display_minimized_closed_issue_cards = Setting.plugin_dashboard['display_closed_statuses'] ? Setting.plugin_dashboard['display_minimized_closed_issue_cards'] : false
     @statuses = get_statuses
