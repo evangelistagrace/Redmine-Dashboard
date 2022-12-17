@@ -34,13 +34,49 @@ class DashboardController < ApplicationController
 
   def get_statuses
     data = {}
-    items = Setting.plugin_dashboard['display_closed_statuses'] ? IssueStatus.sorted : IssueStatus.sorted.where('is_closed = false')
-    items.each do |item|
-      data[item.id] = {
-        :name => item.name,
-        :color => Setting.plugin_dashboard["status_color_" + item.id.to_s],
-        :is_closed => item.is_closed
+    # items = Setting.plugin_dashboard['display_closed_statuses'] ? IssueStatus.sorted : IssueStatus.sorted.where('is_closed = false')
+    # items = []
+    items = [
+      {
+        id: 1,
+        name: 'To-Do',
+        color: '#ddd',
+        is_closed: false
+      },
+      {
+        id: 2,
+        name: 'In-progress',
+        color: '#ccc',
+        is_closed: false
+      },
+      {
+        id: 3,
+        name: 'In-review',
+        color: '#bbb',
+        is_closed: false
+      },
+      {
+        id:4,
+        name: 'Completed',
+        color: '#aaa',
+        is_closed: true
       }
+    ]
+    
+    # items.each do |item|
+    #   data[item.id] = {
+    #     :name => item.name,
+    #     :color => '#aaa',
+    #     :is_closed => item.is_closed
+    #   }
+
+    items.each do |item|
+      data[item[:id]] = {
+        :name => item[:name],
+        :color => item[:color],
+        :is_closed => item[:is_closed]
+      }
+
     end
     data
   end
@@ -87,10 +123,18 @@ class DashboardController < ApplicationController
     end
 
     data = items.map do |item|
+      # to-do
+      if(item.status.id == 8 || item.status.id == 9 || item.status.id == 10) 
+        statusID = 1
+      else 
+        # in-progress
+        statusID = item.status.id
+      end
+
       {
         :id => item.id,
         :subject => item.subject,
-        :status_id => item.status.id,
+        :status_id => statusID,
         :project_id => item.project.id,
         :created_on => item.created_on,
         :author => item.author.name(User::USER_FORMATS[:firstname_lastname]),
