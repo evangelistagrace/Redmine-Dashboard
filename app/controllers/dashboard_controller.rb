@@ -131,14 +131,19 @@ class DashboardController < ApplicationController
         statusID = item.status.id
       end
 
+      # puts item
+      # Rails.logger.info 'hello world'
+
       {
         :id => item.id,
         :subject => item.subject,
         :status_id => statusID,
         :project_id => item.project.id,
         :created_on => item.created_on,
-        :author => item.author.name(User::USER_FORMATS[:firstname_lastname]),
-        :executor => item.assigned_to.nil? ? '' : item.assigned_to.name
+        # :author => item.author.name(User::USER_FORMATS[:firstname_lastname]),
+        # :executor => item.assigned_to.nil? ? '' : item.assigned_to.name
+        :author => User.find(item.custom_field_value(4)), # functional
+        :executor => User.find(item.custom_field_value(5)) # developer
       }
     end
     data.sort_by { |item| item[:created_on] }
